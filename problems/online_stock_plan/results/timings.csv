@@ -1,0 +1,5 @@
+implementation,avg_runtime_s,runs
+spanner_optimal,0.00503409,10
+spanner_ugly,0.00854643,10
+spanner_suboptimal,0.00687514,10
+spanner_naive,6.39929309,10
