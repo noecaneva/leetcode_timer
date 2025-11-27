@@ -1,0 +1,4 @@
+implementation,avg_runtime_s,runs
+find_arr_naive,0.23690612,10
+find_arr_compare_is,0.00000041,10
+find_arr_compare_equal,0.00000035,10

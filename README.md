@@ -29,7 +29,7 @@ leetcode_timer/
 
 ## Languages
 
-This repository contains Python code.
+This repository contains Python code only.
 
 ## How to use
 
