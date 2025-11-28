@@ -34,7 +34,7 @@ This repository contains Python code only.
 ## How to use
 
 1. Clone or download the repo.
-2. Add your solution to the appropriate `implementations/` folder (e.g., `impl.py` or analogous).
+2. Add your solution to the appropriate `implementations/` folder (e.g., `impl.py` or analogous). Follow the structure of the other examples.
 3. Register your solution in the problem's `SOLUTIONS` dictionary so the runner sees it.
 4. Add or update test inputs in `inputs/`.
 5. Run the benchmark/experiment runner in `control/` to compare implementations and collect timings.
