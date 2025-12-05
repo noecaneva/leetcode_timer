@@ -17,11 +17,15 @@ if str(PROJECT_ROOT) not in sys.path:
 def time_function(func, arg, repeats: int = 10) -> float:
     """Return average runtime in seconds for func(arg)."""
     runtimes: List[float] = []
-    for _ in range(repeats):
-        start = time.perf_counter()
-        func(arg)
-        end = time.perf_counter()
-        runtimes.append(end - start)
+    try:
+        for _ in range(repeats):
+            start = time.perf_counter()
+            func(arg)
+            end = time.perf_counter()
+            runtimes.append(end - start)
+    except Exception as e:
+        print(f"    Exception during timing: {e}")
+        runtimes.append(float(100))  # large penalty
     return sum(runtimes) / len(runtimes)
 
 
