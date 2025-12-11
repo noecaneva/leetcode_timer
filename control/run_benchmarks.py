@@ -14,18 +14,18 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 
-def time_function(func, arg, repeats: int = 10) -> float:
+def time_function(func, arg, repeats: int = 50) -> float:
     """Return average runtime in seconds for func(arg)."""
     runtimes: List[float] = []
-    try:
-        for _ in range(repeats):
-            start = time.perf_counter()
-            func(arg)
-            end = time.perf_counter()
-            runtimes.append(end - start)
-    except Exception as e:
-        print(f"    Exception during timing: {e}")
-        runtimes.append(float(100))  # large penalty
+    # try:
+    for _ in range(repeats):
+        start = time.perf_counter()
+        func(arg)
+        end = time.perf_counter()
+        runtimes.append(end - start)
+    # except Exception as e:
+    #     print(f"    Exception during timing: {e}")
+    #     runtimes.append(float(100))  # large penalty
     return sum(runtimes) / len(runtimes)
 
 
@@ -51,8 +51,8 @@ def get_solutions(problem_name: str) -> Dict[str, Callable]:
     module_path = f"problems.{problem_name}.impl"
     try:
         mod = importlib.import_module(module_path)
-    except ModuleNotFoundError:
-        print("  No impl.py found, skipping.")
+    except ModuleNotFoundError as e:
+        print(f"  Error importing impl.py {e}")
         return {}
 
     if not hasattr(mod, "SOLUTIONS"):

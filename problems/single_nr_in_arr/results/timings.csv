@@ -1,0 +1,8 @@
+implementation,avg_runtime_s,runs
+bool flipping,0.00086353,10
+int flipping,0.00194414,10
+char flipping,0.00166129,10
+bit flipping,0.00055367,10
+bit no if flipping,0.00075099,10
+bitmask,0.00039812,10
+reduce xor,0.00039882,10
