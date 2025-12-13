@@ -1,0 +1,7 @@
+TEST_INPUT1 = [2, 2, 1]
+TEST_INPUT2 = [2, 2, 2]
+TEST_INPUT3 = [8, 2, 1]
+TEST_INPUT4 = [1, 2, 3]
+TEST_INPUT5 = [0, 10**4, 0]
+TEST_INPUT6 = [10**4, 10**4, 10**4]
+TEST_INPUT7 = [10**4, 0, 10**4]
