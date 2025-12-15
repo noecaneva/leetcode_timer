@@ -6,7 +6,7 @@ from typing import List
 import matplotlib.pyplot as plt
 from pathlib import Path
 import sys
-from typing import List, Dict, Callable
+from typing import List, Dict, Callable, Optional
 
 CURRENT_FILE = Path(__file__).resolve()
 PROJECT_ROOT = CURRENT_FILE.parents[1]
@@ -14,20 +14,28 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 
-def time_function(func, arg, repeats: int = 50) -> float:
-    """Return average runtime in seconds for func(arg)."""
+def time_function(func, arg, setup_func: Optional[Callable] = None, repeats: int = 50) -> float:
+    """
+    Return average runtime in seconds for func(arg).
+    If setup_func is provided, it runs before the timer in every loop
+    to ensure a fresh input structure (like a Tree) for every run.
+    """
     runtimes: List[float] = []
-    # try:
+    
     for _ in range(repeats):
+        # Prepare input
+        if setup_func:
+            run_arg = setup_func(arg)
+        else:
+            run_arg = arg
+
+        # Run and time
         start = time.perf_counter()
-        func(arg)
+        func(run_arg)
         end = time.perf_counter()
         runtimes.append(end - start)
-    # except Exception as e:
-    #     print(f"    Exception during timing: {e}")
-    #     runtimes.append(float(100))  # large penalty
-    return sum(runtimes) / len(runtimes)
 
+    return sum(runtimes) / len(runtimes)
 
 def load_test_input(problem_name: str):
     """Import problems.<problem>.inputs.test_inputs and read TEST_INPUTi."""
@@ -73,6 +81,21 @@ def get_solutions(problem_name: str) -> Dict[str, Callable]:
             print(f"  skip {name} in SOLUTIONS, not callable")
 
     return clean_solutions
+
+def get_setups(problem_name: str) -> Dict[str, Callable]:
+    """
+    Import problems.<problem>.impl and read SETUPS dict (optional).
+    Returns a dict of implementation_name -> setup_function.
+    """
+    module_path = f"problems.{problem_name}.impl"
+    try:
+        mod = importlib.import_module(module_path)
+    except ModuleNotFoundError:
+        return {} # Fail silently, setup is optional
+
+    if hasattr(mod, "SETUPS") and isinstance(mod.SETUPS, dict):
+        return mod.SETUPS
+    return {}
 
 # the csv should have 2 rows: implementation, runtime, runs
 # the path is to the csv of the results
@@ -148,6 +171,8 @@ def run_for_problem(problem_name: str):
     if not solutions:
         print("  No implementation files, skipping.")
         return
+    
+    setups = get_setups(problem_name)
 
     already_done = set(load_existing_impls(timings_csv))
 
@@ -161,8 +186,12 @@ def run_for_problem(problem_name: str):
         nr_runs = 10
         avg = 0
         count = 0
+
+        # Check if this implementation has a specific setup
+        setup_func = setups.get(impl_name)
+
         for test_input_name, test_input_val in test_input.items():
-            avg += time_function(impl_func, test_input_val, repeats=nr_runs)
+            avg += time_function(impl_func, test_input_val, setup_func=setup_func, repeats=nr_runs)
             count += 1
         avg /= count
         new_records.append(

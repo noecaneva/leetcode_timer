@@ -2,6 +2,8 @@ from typing import List
 
 class Solution:
     def minFlips(self, inp: List[int]) -> int:
+        print("Input: ____________________________________________________________________________vfsibmksl")
+        print(inp)
         a, b, c = inp
         # Mask on where bits have to be flipped
         or_xor_mask = (a | b)^c
